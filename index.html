@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en-US" class="h-full w-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script src="https://js.puter.com/v2/"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css" />
+    <link id="judge0-golden-layout-dark-theme-stylesheet" type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css" disabled />
+    <link id="judge0-golden-layout-light-theme-stylesheet" type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-light-theme.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js" integrity="sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        require.config({
+            paths: {
+                "vs": "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+            }
+        });
+    </script>
+
+    <script type="module" src="./js/configuration.js"></script>
+    <script type="module" src="./js/electron.js"></script>
+    <script type="module" src="./js/layout.js"></script>
+    <script type="module" src="./js/local_storage.js"></script>
+    <script type="module" src="./js/puter.js"></script>
+    <script type="module" src="./js/query.js"></script>
+    <script type="module" src="./js/style.js"></script>
+    <script type="module" src="./js/theme.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="./css/site.css">
+
+    <!-- <script src="https://js.puter.com/v2/"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -12,17 +45,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha512-LQNxIMR5rXv7o+b1l8+N1EZMfhG7iFZ9HhnbJkTp4zjNr5Wvst75AqUeFDxeRUa7l5vEDyUiAip//r+EFLLCyA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha512-fHwaWebuwA7NSF5Qg/af4UeDx9XqUpYpOGgubo3yWu+b2IQR4UeQwbb42Ti7gVAjNtVoI/I9TEoYeu9omwcC6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js" integrity="sha512-Ll+TuDvrWDNNRnFFIM8dOiw7Go7dsHyxRp4RutiIFW/wm3DgDmCnRZow6AqbXnCbpWu93yM1O34q+4ggzGeXVA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js" integrity="sha512-Ll+TuDvrWDNNRnFFIM8dOiw7Go7dsHyxRp4RutiIFW/wm3DgDmCnRZow6AqbXnCbpWu93yM1O34q+4ggzGeXVA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 
-    <script>
+    <!-- <script>
         var require = {
             paths: {
                 "vs": "./vendor/monaco-editor-0.44.0/min/vs"
             }
         };
-    </script>
+    </script> -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout.min.js" integrity="sha256-NhJAZDfGgv4PiB+GVlSrPdh3uc75XXYSM4su8hgTchI=" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout.min.js" integrity="sha256-NhJAZDfGgv4PiB+GVlSrPdh3uc75XXYSM4su8hgTchI=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css" integrity="sha512-rGtzJyDE8egZ/OScuBNLW1EIhRydcfrZo14oTvZwRLzEZu+s8foCtwi0XhXsKnhuoQAwJ7POFARWdU4fBL7FbQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link id="judge0-golden-layout-dark-theme-stylesheet" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-dark-theme.css" integrity="sha512-XfcBrEH69BhsZ0XpvPyzOLgikhAvIG6Znbi6yKi1Jh1iYaOXSXvljWFerhcUl5LYLCuV61KhfCydQ1+MNxnilg==" crossorigin="anonymous" referrerpolicy="no-referrer" disabled>
     <link id="judge0-golden-layout-light-theme-stylesheet" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-light-theme.css" integrity="sha512-/S3N+v8cRHW2GJvM3v9FGHAKOhNgws+V1dYZb1fBxRd9XIwpqZFZB0jug+2HHf64eURsJLqVzCVn92pQTFHHow==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -36,9 +69,9 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css" integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 
-    <script type="module" src="js/ai.js"></script>
+    <!-- <script type="module" src="js/ai.js"></script>
     <script type="module" src="js/configuration.js"></script>
     <script type="module" src="js/electron.js"></script>
     <script type="module" src="js/ide.js"></script>
@@ -50,7 +83,7 @@
 
     <link type="text/css" rel="stylesheet" href="css/ide.css">
     <link type="text/css" rel="stylesheet" href="css/semantic.css">
-    <link type="text/css" rel="stylesheet" href="css/site.css">
+    <link type="text/css" rel="stylesheet" href="css/site.css"> -->
 
     <title>Judge0 IDE</title>
     <meta name="title" content="Judge0 IDE">
@@ -90,8 +123,31 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 
-<body>
-    <div id="judge0-site-navigation" class="ui top fixed borderless menu judge0-showNavigation">
+<body class="bg-white dark:bg-dark text-zinc-900 dark:text-zinc-50 h-full w-full flex flex-col" style="opacity: 0 !important;">
+    <header class="flex items-center space-x-1 p-1 judge0-showNavigation">
+        <a href="https://judge0.com" target="_blank" class="rounded-md h-8 w-8 judge0-showLogo">
+            <img src="./images/icon_var2_rounded_512.png">
+        </a>
+        <button id="judge0-theme-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-900 active:bg-zinc-200 dark:active:bg-zinc-800 h-8 w-8 judge0-showThemeButton"><i class="fa-solid fa-sun"></i></button>
+        <div class="judge0-showPuterSignInOutButton">
+            <button id="judge0-sign-in-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-900 active:bg-zinc-200 dark:active:bg-zinc-800 h-8 px-4">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                Sign in with Puter
+            </button>
+            <button id="judge0-sign-out-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-900 active:bg-zinc-200 dark:active:bg-zinc-800 h-8 px-4">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span id="judge0-puter-username"></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow min-h-0 overflow-hidden"></main>
+
+    <footer class="text-center text-xs judge0-showCopyright">
+        <a href="https://judge0.com" target="_blank">© 2016-2025 Judge0 d.o.o. – All Rights Reserved. • A Croatian 🇭🇷 company</a>
+    </footer>
+
+    <!-- <div id="judge0-site-navigation" class="ui top fixed borderless menu judge0-showNavigation">
         <a id="judge0-header" href="https://judge0.com" target="_blank" class="header item judge0-showLogo">
             <img id="judge0-logo" src="./images/icon_var2_rounded_512.png">
         </a>
@@ -227,6 +283,6 @@
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("sw.js").then(() => console.log("Service Worker Registered"));
         }
-    </script>
+    </script> -->
 </body>
 </html>

@@ -7,37 +7,37 @@ export function usePuter() {
 }
 
 async function uiSignIn() {
-    document.getElementById("judge0-sign-in-btn").classList.add("judge0-hidden");
     const signOutBtn = document.getElementById("judge0-sign-out-btn");
-    signOutBtn.classList.remove("judge0-hidden");
     signOutBtn.querySelector("#judge0-puter-username").innerText = (await puter.auth.getUser()).username;
+    document.getElementById("judge0-sign-in-btn").classList.add("judge0-hidden");
+    signOutBtn.classList.remove("judge0-hidden");
 
-    const modelSelect = document.getElementById("judge0-chat-model-select");
-    modelSelect.closest(".ui.selection.dropdown").classList.remove("disabled");
+    // const modelSelect = document.getElementById("judge0-chat-model-select");
+    // modelSelect.closest(".ui.selection.dropdown").classList.remove("disabled");
 
-    const userInput = document.getElementById("judge0-chat-user-input");
-    userInput.disabled = false;
-    userInput.placeholder = `Message ${modelSelect.value}`;
+    // const userInput = document.getElementById("judge0-chat-user-input");
+    // userInput.disabled = false;
+    // userInput.placeholder = `Message ${modelSelect.value}`;
 
-    document.getElementById("judge0-chat-send-button").disabled = false;
-    document.getElementById("judge0-inline-suggestions").disabled = false;
+    // document.getElementById("judge0-chat-send-button").disabled = false;
+    // document.getElementById("judge0-inline-suggestions").disabled = false;
 }
 
 function uiSignOut() {
-    document.getElementById("judge0-sign-in-btn").classList.remove("judge0-hidden");
     const signOutBtn = document.getElementById("judge0-sign-out-btn");
+    document.getElementById("judge0-sign-in-btn").classList.remove("judge0-hidden");
     signOutBtn.classList.add("judge0-hidden");
-    signOutBtn.querySelector("#judge0-puter-username").innerText = "Sign out";
+    signOutBtn.querySelector("#judge0-puter-username").innerText = "";
 
-    const modelSelect = document.getElementById("judge0-chat-model-select");
-    modelSelect.closest(".ui.selection.dropdown").classList.add("disabled");
+    // const modelSelect = document.getElementById("judge0-chat-model-select");
+    // modelSelect.closest(".ui.selection.dropdown").classList.add("disabled");
 
-    const userInput = document.getElementById("judge0-chat-user-input");
-    userInput.disabled = true;
-    userInput.placeholder = `Sign in to chat with ${modelSelect.value}`;
+    // const userInput = document.getElementById("judge0-chat-user-input");
+    // userInput.disabled = true;
+    // userInput.placeholder = `Sign in to chat with ${modelSelect.value}`;
 
-    document.getElementById("judge0-chat-send-button").disabled = true;
-    document.getElementById("judge0-inline-suggestions").disabled = true;
+    // document.getElementById("judge0-chat-send-button").disabled = true;
+    // document.getElementById("judge0-inline-suggestions").disabled = true;
 }
 
 function updateSignInUI() {

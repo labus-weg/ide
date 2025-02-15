@@ -11,11 +11,11 @@ const style = {
             const showOption = config.styleOptions[styleOption];
             if (showOption) {
                 document.querySelectorAll(`.judge0-${styleOption}`).forEach(e => {
-                    e.classList.remove("judge0-style-hidden");
+                    e.classList.remove("hidden");
                 });
             } else {
                 document.querySelectorAll(`.judge0-${styleOption}`).forEach(e => {
-                    e.classList.add("judge0-style-hidden");
+                    e.classList.add("hidden");
                 });
             }
         });
