@@ -32,6 +32,7 @@
     <script type="module" src="/js/local_storage.js"></script>
     <script type="module" src="/js/puter.js"></script>
     <script type="module" src="/js/query.js"></script>
+    <script type="module" src="/js/site.js"></script>
     <script type="module" src="/js/style.js"></script>
     <script type="module" src="/js/theme.js"></script>
 
@@ -77,32 +78,32 @@
 
 <body class="flex flex-col w-full h-full text-black bg-white dark:bg-black dark:text-white" style="opacity: 0 !important;">
     <header class="flex items-center p-1 space-x-1 judge0-showNavigation">
-        <a href="https://judge0.com" target="_blank" class="w-8 h-8 rounded-md focus-visible:outline-none focus-visible:ring-2 judge0-showLogo">
+        <a href="https://judge0.com" target="_blank" rel="noopener" tabindex="-1" class="w-8 h-8 rounded-md judge0-showLogo">
             <img src="./images/icon_var2_rounded_512.png">
         </a>
         <input id="judge0-compiler-options" class="h-8 px-3 py-2 text-sm bg-transparent border rounded-md dark:border-zinc-800 max-md:hidden focus-visible:outline-none focus-visible:ring-2 placeholder:text-sm judge0-showCompilerOptions" placeholder="Compiler options" type="text">
         <input id="judge0-command-line-arguments" class="h-8 px-3 py-2 text-sm bg-transparent border rounded-md dark:border-zinc-800 max-md:hidden focus-visible:outline-none focus-visible:ring-2 placeholder:text-sm judge0-showCommandLineArguments" placeholder="Command line arguments" type="text">
-        <button id="judge0-run-btn" class="inline-flex items-center justify-center h-8 gap-2 px-4 text-sm font-semibold transition-colors bg-blue-800 rounded-md focus-visible:outline-none focus-visible:ring-2 hover:bg-blue-900 dark:hover:bg-blue-700 text-blue-50 whitespace-nowrap judge0-showRunButton">
+        <button id="judge0-run-btn" class="inline-flex items-center justify-center h-8 gap-2 px-4 text-sm font-semibold transition bg-blue-800 rounded-md focus-visible:outline-none focus-visible:ring-2 hover:bg-blue-900 dark:hover:bg-blue-700 text-blue-50 whitespace-nowrap judge0-showRunButton">
             <i class="fa-solid fa-play"></i>
             Run
         </button>
         <div class="judge0-showPuterSignInOutButton max-sm:hidden">
-            <button id="judge0-sign-in-btn" class="inline-flex items-center justify-center h-8 gap-2 px-4 text-sm font-semibold transition-colors rounded-md text-zinc-800 dark:text-white dark:hover:bg-zinc-700 dark:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 bg-zinc-100 hover:bg-zinc-200 whitespace-nowrap">
+            <button id="judge0-sign-in-btn" class="inline-flex items-center justify-center h-8 gap-2 px-4 text-sm font-semibold transition rounded-md text-zinc-800 dark:text-white dark:hover:bg-zinc-700 dark:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 bg-zinc-100 hover:bg-zinc-200 whitespace-nowrap">
                 <i class="fa-arrow-right-to-bracket fa-solid"></i>
                 Sign in with Puter
             </button>
-            <button id="judge0-sign-out-btn" class="inline-flex items-center justify-center h-8 gap-2 px-4 text-sm font-semibold transition-colors rounded-md text-zinc-800 dark:text-white dark:hover:bg-zinc-700 dark:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 bg-zinc-100 hover:bg-zinc-200 whitespace-nowrap">
+            <button id="judge0-sign-out-btn" class="inline-flex items-center justify-center h-8 gap-2 px-4 text-sm font-semibold transition rounded-md text-zinc-800 dark:text-white dark:hover:bg-zinc-700 dark:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 bg-zinc-100 hover:bg-zinc-200 whitespace-nowrap">
                 <i class="fa-arrow-right-from-bracket fa-solid"></i>
                 <span id="judge0-puter-username"></span>
             </button>
         </div>
-        <button id="judge0-theme-btn" class="inline-flex items-center justify-center w-8 h-8 gap-2 text-sm font-semibold transition-colors rounded-md text-zinc-800 dark:text-white dark:hover:bg-zinc-700 dark:bg-zinc-800 max-md:hidden focus-visible:outline-none focus-visible:ring-2 bg-zinc-100 hover:bg-zinc-200 whitespace-nowrap judge0-showThemeButton"><i class="fa-solid fa-sun"></i></button>
+        <button id="judge0-theme-btn" class="inline-flex items-center justify-center w-8 h-8 gap-2 text-sm font-semibold transition rounded-md text-zinc-800 dark:text-white dark:hover:bg-zinc-700 dark:bg-zinc-800 max-md:hidden focus-visible:outline-none focus-visible:ring-2 bg-zinc-100 hover:bg-zinc-200 whitespace-nowrap judge0-showThemeButton"><i class="fa-solid fa-sun"></i></button>
     </header>
 
     <main class="flex-grow min-h-0 overflow-hidden"></main>
 
-    <footer class="text-xs text-center opacity-40 max-sm:hidden judge0-showCopyright">
-        <a href="https://judge0.com" target="_blank">© 2016-2025 Judge0 d.o.o. – All Rights Reserved. • A Croatian 🇭🇷 company</a>
+    <footer class="text-xs text-center transition opacity-40 hover:opacity-100 max-sm:hidden judge0-showCopyright">
+        <a href="https://judge0.com" target="_blank" rel="noopener" tabindex="-1">© 2016-<span id="judge0-year">2025</span> Judge0 d.o.o. – All Rights Reserved. • A Croatian 🇭🇷 company</a>
     </footer>
 
     <!-- <div id="judge0-site-navigation" class="fixed top borderless ui menu judge0-showNavigation">
