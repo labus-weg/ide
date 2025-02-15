@@ -123,22 +123,26 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 
-<body class="bg-white dark:bg-black text-zinc-800 dark:text-zinc-300 h-full w-full flex flex-col" style="opacity: 0 !important;">
+<body class="bg-white dark:bg-black text-black dark:text-white h-full w-full flex flex-col" style="opacity: 0 !important;">
     <header class="flex items-center space-x-1 p-1 judge0-showNavigation">
         <a href="https://judge0.com" target="_blank" class="rounded-md h-8 w-8 judge0-showLogo">
             <img src="./images/icon_var2_rounded_512.png">
         </a>
-        <button id="judge0-theme-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-800 h-8 w-8 judge0-showThemeButton"><i class="fa-solid fa-sun"></i></button>
+        <button id="judge0-run-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors text-blue-50 bg-blue-800 hover:bg-blue-900 h-8 px-4 judge0-showRunButton">
+            <i class="fa-solid fa-play"></i>
+            Run
+        </button>
         <div class="judge0-showPuterSignInOutButton">
-            <button id="judge0-sign-in-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-800 h-8 px-4">
+            <button id="judge0-sign-in-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors text-blue-800 bg-blue-50 hover:bg-blue-100 h-8 px-4">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 Sign in with Puter
             </button>
-            <button id="judge0-sign-out-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-800 h-8 px-4">
+            <button id="judge0-sign-out-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors text-blue-800 bg-blue-50 hover:bg-blue-100 h-8 px-4">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span id="judge0-puter-username"></span>
             </button>
         </div>
+        <button id="judge0-theme-btn" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors text-blue-800 bg-blue-50 hover:bg-blue-100 h-8 w-8 judge0-showThemeButton"><i class="fa-solid fa-sun"></i></button>
     </header>
 
     <main class="flex-grow min-h-0 overflow-hidden"></main>
