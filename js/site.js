@@ -14,11 +14,11 @@ document.body.addEventListener("click", function (event) {
         const span = dropdown.querySelector("span");
         span.innerText = event.target.innerText;
         dropdown.querySelector(".judge0-dropdown-menu").classList.toggle("hidden");
-    } else {
-        document.querySelectorAll(".judge0-dropdown-menu").forEach(function (dropdownMenu) {
-            if (!dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.add("hidden");
-            }
-        });
     }
+
+    document.querySelectorAll(".judge0-dropdown-menu").forEach(function (dropdownMenu) {
+        if (!dropdownMenu.contains(event.target) && dropdown !== dropdownMenu.closest(".judge0-dropdown")) {
+            dropdownMenu.classList.add("hidden");
+        }
+    });
 });
