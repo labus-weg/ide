@@ -22,3 +22,7 @@ document.body.addEventListener("click", function (event) {
         }
     });
 });
+
+window.addEventListener("load", function() {
+    document.body.removeAttribute("style");
+});

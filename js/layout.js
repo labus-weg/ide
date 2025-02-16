@@ -200,7 +200,3 @@ document.addEventListener("DOMContentLoaded", function () {
         ide.layout.init();
     });
 });
-
-window.addEventListener("load", function() {
-    document.body.removeAttribute("style");
-});
