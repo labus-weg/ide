@@ -103,3 +103,131 @@ document.addEventListener("DOMContentLoaded", () => {
     const chat = new AIChat();
     chat.setupKeyboardShortcuts();
 });
+
+
+// Configure Monaco Editor with inline suggestions
+require(["vs/editor/editor.main"], function() {
+    // Register inline suggestions provider for all languages
+    monaco.languages.registerInlineCompletionsProvider('*', {
+        provideInlineCompletions: async (model, position, context) => {
+            if (!puter.auth.isSignedIn() || 
+                !document.getElementById("judge0-inline-suggestions").checked || 
+                !configuration.get("appOptions.showAIAssistant")) {
+                return;
+            }
+
+            // Get text before and after cursor for context
+            const textBeforeCursor = model.getValueInRange({
+                startLineNumber: 1,
+                startColumn: 1,
+                endLineNumber: position.lineNumber,
+                endColumn: position.column
+            });
+
+            const textAfterCursor = model.getValueInRange({
+                startLineNumber: position.lineNumber,
+                startColumn: position.column,
+                endLineNumber: model.getLineCount(),
+                endColumn: model.getLineMaxColumn(model.getLineCount())
+            });
+
+            try {
+                // Get AI suggestion using Puter API
+                const aiResponse = await puter.ai.chat([{
+                    role: "user",
+                    content: `You are a code completion assistant. Given the following context, generate the most likely code completion.
+
+                    ### Code Before Cursor:
+                    ${textBeforeCursor}
+
+                    ### Code After Cursor:
+                    ${textAfterCursor}
+
+                    ### Instructions:
+                    - Predict the next logical code segment
+                    - Ensure the suggestion is syntactically and contextually correct
+                    - Keep the completion concise and relevant
+                    - Do not repeat existing code
+                    - Provide only the missing code
+                    - **Respond with only the code, without markdown formatting**
+                    - **Do not include triple backticks (\`\`\`) or additional explanations**
+
+                    ### Completion:`.trim()
+                }], {
+                    model: document.getElementById("judge0-chat-model-select").value,
+                });
+
+                // Process the response
+                let aiResponseValue = aiResponse?.toString().trim() || "";
+                if (Array.isArray(aiResponseValue)) {
+                    aiResponseValue = aiResponseValue.map(v => v.text).join("\n").trim();
+                }
+
+                if (!aiResponseValue || aiResponseValue.length === 0) {
+                    return;
+                }
+
+                // Return the suggestion
+                return {
+                    items: [{
+                        insertText: aiResponseValue,
+                        range: {
+                            startLineNumber: position.lineNumber,
+                            startColumn: position.column,
+                            endLineNumber: position.lineNumber,
+                            endColumn: position.column
+                        }
+                    }]
+                };
+            } catch (error) {
+                console.error('Inline suggestion error:', error);
+                return null;
+            }
+        },
+        
+        // Required but can be empty for basic implementation
+        handleItemDidShow: () => {},
+        handleItemDidHide: () => {},
+        freeInlineCompletions: () => {}
+    });
+
+    // Add UI toggle for inline suggestions
+    const settingsContainer = document.querySelector('.settings-container');
+    if (settingsContainer) {
+        const toggleDiv = document.createElement('div');
+        toggleDiv.className = 'ui toggle checkbox';
+        toggleDiv.innerHTML = `
+            <input type="checkbox" id="judge0-inline-suggestions" checked>
+            <label>Enable AI inline suggestions</label>
+        `;
+        settingsContainer.appendChild(toggleDiv);
+    }
+});
+
+// Update the editor configuration with inline suggestions enabled
+const editorConfig = {
+    value: '// Start coding here...',
+    language: 'javascript',
+    theme: 'vs-dark',
+    automaticLayout: true,
+    inlineSuggest: {
+        enabled: true,
+        mode: 'subword'
+    },
+    // Other existing editor options...
+    minimap: {
+        enabled: true
+    }
+};
+
+// Create editor with updated configuration
+sourceEditor = monaco.editor.create(container.getElement()[0], editorConfig);
+
+// Add keyboard shortcut for accepting suggestions
+sourceEditor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.Tab, () => {
+    // Accept the current inline suggestion if present
+    const controller = sourceEditor.getContribution('editor.contrib.inlineSuggestionController');
+    if (controller) {
+        controller.accept();
+    }
+});
