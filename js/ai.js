@@ -1,144 +1,242 @@
 "use strict";
-import theme from "./theme.js";
-import configuration from "./configuration.js";
-import { sourceEditor } from "./ide.js";
 
-const THREAD = [
-    {
-        role: "system",
-        content: `
-You are an AI assistant integrated into an online code editor.
-Your main job is to help users with their code, but you should also be able to engage in casual conversation.
+// Constants for API configuration
+const API_CONFIG = {
+    baseUrl: 'https://api.openai.com/v1/chat/completions',
+    model: 'gpt-3.5-turbo',
+    maxTokens: 150,
+    temperature: 0.7
+};
 
-The following are your guidelines:
-1. **If the user asks for coding help**:
-   - Always consider the user's provided code.
-   - Analyze the code and provide relevant help (debugging, optimization, explanation, etc.).
-   - Make sure to be specific and clear when explaining things about their code.
-
-2. **If the user asks a casual question or makes a casual statement**:
-   - Engage in friendly, natural conversation.
-   - Do not reference the user's code unless they bring it up or ask for help.
-   - Be conversational and polite.
-
-3. **If the user's message is ambiguous or unclear**:
-   - Politely ask for clarification or more details to better understand the user's needs.
-   - If the user seems confused about something, help guide them toward what they need.
-
-4. **General Behavior**:
-   - Always respond in a helpful, friendly, and professional tone.
-   - Never assume the user's intent. If unsure, ask clarifying questions.
-   - Keep the conversation flowing naturally, even if the user hasn't directly asked about their code.
-
-You will always have access to the user's latest code.
-Use this context only when relevant to the user's message.
-If their message is unrelated to the code, focus solely on their conversational intent.
-        `.trim()
+// Chat interface component
+class AIChat {
+    constructor() {
+        this.chatContainer = document.getElementById('judge0-chat-container');
+        this.messagesList = document.getElementById('judge0-chat-messages');
+        this.inputField = document.getElementById('judge0-chat-user-input');
+        this.setupEventListeners();
     }
-];
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("judge0-chat-form").addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const userInput = document.getElementById("judge0-chat-user-input");
-        const userInputValue = userInput.value.trim();
-        if (userInputValue === "") {
-            return;
-        }
-
-        const sendButton = document.getElementById("judge0-chat-send-button");
-        sendButton.classList.add("loading");
-        userInput.disabled = true;
-
-        const messages = document.getElementById("judge0-chat-messages");
-        
-        // Display user message
-        const userMessage = document.createElement("div");
-        userMessage.innerText = userInputValue;
-        userMessage.classList.add("ui", "message", "judge0-message", "judge0-user-message");
-        if (!theme.isLight()) {
-            userMessage.classList.add("inverted");
-        }
-        messages.appendChild(userMessage);
-
-        userInput.value = "";
-        messages.scrollTop = messages.scrollHeight;
-
-        THREAD.push({
-            role: "user",
-            content: `User's code:\n${sourceEditor.getValue()}\n\nUser's message:\n${userInputValue}`.trim()
+    setupEventListeners() {
+        // Debounced input handler for better performance
+        let timeout;
+        this.inputField.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => this.handleInput(), 300);
         });
 
-        // Display AI loading message
-        const aiMessage = document.createElement("div");
-        aiMessage.classList.add("ui", "basic", "segment", "judge0-message", "loading");
-        if (!theme.isLight()) {
-            aiMessage.classList.add("inverted");
-        }
-        messages.appendChild(aiMessage);
-        messages.scrollTop = messages.scrollHeight;
+        // Form submission
+        document.getElementById('judge0-chat-form').addEventListener('submit', 
+            async (e) => {
+                e.preventDefault();
+                await this.handleSubmit();
+            }
+        );
+    }
 
-        try {
-            const aiResponse = await puter.ai.chat(THREAD, {
-                model: document.getElementById("judge0-chat-model-select").value,
-            });
-            let aiResponseValue = typeof aiResponse === "string" ? aiResponse : aiResponse.map(v => v.text).join("\n");
-            
-            THREAD.push({
-                role: "assistant",
-                content: aiResponseValue
-            });
-            
-            aiMessage.innerHTML = DOMPurify.sanitize(marked.parse(aiResponseValue));
-            renderMathInElement(aiMessage, {
-                delimiters: [
-                    { left: "\\(", right: "\\)", display: false },
-                    { left: "\\[", right: "\\]", display: true }
-                ]
-            });
-        } catch (error) {
-            aiMessage.innerText = "Error: Unable to fetch response. Please try again.";
-        }
-        
-        aiMessage.classList.remove("loading");
-        messages.scrollTop = messages.scrollHeight;
-
-        userInput.disabled = false;
-        sendButton.classList.remove("loading");
-        userInput.focus();
-    });
-
-    document.getElementById("judge0-chat-model-select").addEventListener("change", function () {
-        document.getElementById("judge0-chat-user-input").placeholder = `Message ${this.value}`;
-    });
-});
-
-// Keyboard shortcut for quick AI input focus
-document.addEventListener("keydown", function (e) {
-    if (e.metaKey || e.ctrlKey) {
-        if (e.key === "p" && configuration.get("appOptions.showAIAssistant")) {
-            e.preventDefault();
-            document.getElementById("judge0-chat-user-input").focus();
+    async handleInput() {
+        // Implement real-time suggestions
+        const input = this.inputField.value.trim();
+        if (input.length > 10) {
+            try {
+                const suggestions = await this.getAISuggestions(input);
+                this.showSuggestions(suggestions);
+            } catch (err) {
+                console.error('Error getting suggestions:', err);
+            }
         }
     }
-});
 
-// added this to ensure min latency
-let timeout;
-document.getElementById('chat-input').addEventListener('input', () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-        // Send message to AI
-    }, 500);
-});
+    async handleSubmit() {
+        const input = this.inputField.value.trim();
+        if (!input) return;
 
-// added a bug finder
-async function findBugs(code) {
-    const prompt = `Analyze the following code for bugs and suggest fixes:\n${code}`;
-    const bugs = await sendChatMessage(prompt);
-    document.getElementById('chat-messages').innerHTML += `<div><strong>AI:</strong> ${bugs}</div>`;
+        this.addMessage('user', input);
+        this.inputField.value = '';
+
+        try {
+            const response = await this.getAIResponse(input);
+            this.addMessage('assistant', response);
+        } catch (err) {
+            this.addMessage('error', 'Sorry, there was an error processing your request.');
+            console.error('Chat error:', err);
+        }
+    }
+
+    addMessage(type, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${type}-message`;
+        messageDiv.innerHTML = marked.parse(content);
+        this.messagesList.appendChild(messageDiv);
+        this.messagesList.scrollTop = this.messagesList.scrollHeight;
+    }
+
+    async getAIResponse(prompt) {
+        const response = await fetch(API_CONFIG.baseUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${configuration.get('aiApiKey')}`
+            },
+            body: JSON.stringify({
+                model: API_CONFIG.model,
+                messages: [{ role: 'user', content: prompt }],
+                max_tokens: API_CONFIG.maxTokens,
+                temperature: API_CONFIG.temperature
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('AI response failed');
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    }
 }
 
-// Example usage (call this when the user clicks a "Find Bugs" button)
-// findBugs(editor.getValue());
+// Code analysis and error handling
+class CodeAnalyzer {
+    constructor(editor) {
+        this.editor = editor;
+        this.setupAnalysis();
+    }
+
+    setupAnalysis() {
+        // Real-time code analysis
+        this.editor.onDidChangeModelContent(() => {
+            clearTimeout(this.analysisTimeout);
+            this.analysisTimeout = setTimeout(() => this.analyzeCode(), 1000);
+        });
+    }
+
+    async analyzeCode() {
+        const code = this.editor.getValue();
+        try {
+            const analysis = await this.getCodeAnalysis(code);
+            this.showAnalysisResults(analysis);
+        } catch (err) {
+            console.error('Analysis error:', err);
+        }
+    }
+
+    async getCodeAnalysis(code) {
+        const prompt = `Analyze this code for potential issues:\n${code}`;
+        return await aiChat.getAIResponse(prompt);
+    }
+
+    showAnalysisResults(analysis) {
+        // Update UI with analysis results
+        const resultsContainer = document.getElementById('analysis-results');
+        if (resultsContainer) {
+            resultsContainer.innerHTML = marked.parse(analysis);
+        }
+    }
+
+    async handleCompilationError(error) {
+        const fix = await this.getSuggestedFix(error);
+        aiChat.addMessage('assistant', `Compilation Error Fix Suggestion:\n${fix}`);
+    }
+
+    async getSuggestedFix(error) {
+        const prompt = `Fix this compilation error:\n${error}`;
+        return await aiChat.getAIResponse(prompt);
+    }
+}
+
+// Inline code chat feature
+class InlineCodeChat {
+    constructor(editor) {
+        this.editor = editor;
+        this.setupInlineChat();
+    }
+
+    setupInlineChat() {
+        this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KEY_C, 
+            () => this.handleInlineChat()
+        );
+    }
+
+    async handleInlineChat() {
+        const selection = this.editor.getSelection();
+        const code = this.editor.getModel().getValueInRange(selection);
+        
+        if (!code) return;
+
+        const response = await aiChat.getAIResponse(
+            `Explain this code:\n${code}`
+        );
+        
+        this.showInlineChatResponse(response, selection);
+    }
+
+    showInlineChatResponse(response, selection) {
+        // Create inline widget
+        const widget = document.createElement('div');
+        widget.className = 'inline-chat-widget';
+        widget.innerHTML = marked.parse(response);
+        
+        // Position widget near selection
+        const position = this.editor.getScrolledVisiblePosition(selection.getEndPosition());
+        widget.style.top = `${position.top}px`;
+        widget.style.left = `${position.left}px`;
+        
+        document.getElementById('editor-container').appendChild(widget);
+    }
+}
+
+// Initialize components
+let aiChat, codeAnalyzer, inlineChat;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Monaco Editor
+    require(['vs/editor/editor.main'], function() {
+        const editor = monaco.editor.create(document.getElementById('editor'), {
+            value: '// Start coding here...',
+            language: 'javascript',
+            theme: 'vs-dark',
+            automaticLayout: true
+        });
+
+        // Initialize components
+        aiChat = new AIChat();
+        codeAnalyzer = new CodeAnalyzer(editor);
+        inlineChat = new InlineCodeChat(editor);
+
+        // Add AI autocomplete provider
+        monaco.languages.registerCompletionItemProvider('javascript', {
+            provideCompletionItems: async function(model, position) {
+                const textUntilPosition = model.getValueInRange({
+                    startLineNumber: 1,
+                    startColumn: 1,
+                    endLineNumber: position.lineNumber,
+                    endColumn: position.column
+                });
+
+                try {
+                    const suggestions = await aiChat.getAIResponse(
+                        `Suggest completions for:\n${textUntilPosition}`
+                    );
+                    
+                    return {
+                        suggestions: suggestions.split('\n').map(suggestion => ({
+                            label: suggestion,
+                            kind: monaco.languages.CompletionItemKind.Text,
+                            insertText: suggestion
+                        }))
+                    };
+                } catch (err) {
+                    console.error('Autocomplete error:', err);
+                    return { suggestions: [] };
+                }
+            }
+        });
+    });
+});
+
+// Export needed functions and classes
+export {
+    AIChat,
+    CodeAnalyzer,
+    InlineCodeChat
+};
