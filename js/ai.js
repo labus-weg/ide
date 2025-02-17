@@ -123,3 +123,22 @@ document.addEventListener("keydown", function (e) {
         }
     }
 });
+
+// added this to ensure min latency
+let timeout;
+document.getElementById('chat-input').addEventListener('input', () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+        // Send message to AI
+    }, 500);
+});
+
+// added a bug finder
+async function findBugs(code) {
+    const prompt = `Analyze the following code for bugs and suggest fixes:\n${code}`;
+    const bugs = await sendChatMessage(prompt);
+    document.getElementById('chat-messages').innerHTML += `<div><strong>AI:</strong> ${bugs}</div>`;
+}
+
+// Example usage (call this when the user clicks a "Find Bugs" button)
+// findBugs(editor.getValue());

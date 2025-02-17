@@ -189,6 +189,9 @@ async function handleCompilationError(errorMessage) {
     document.getElementById('chat-messages').innerHTML += `<div><strong>AI:</strong> ${fix}</div>`;
 }
 
+
+
+
 function getSelectedLanguageId() {
     return parseInt($selectLanguage.val());
 }
@@ -949,6 +952,7 @@ const EXTENSIONS_TABLE = {
 function getLanguageForExtension(extension) {
     return EXTENSIONS_TABLE[extension] || { "flavor": CE, "language_id": 43 }; // Plain Text (https://ce.judge0.com/languages/43)
 }
+
 
 
 require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
