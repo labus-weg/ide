@@ -48,18 +48,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const sendButton = document.getElementById("judge0-chat-send-button");
-
         sendButton.classList.add("loading");
         userInput.disabled = true;
 
+        const messages = document.getElementById("judge0-chat-messages");
+        
+        // Display user message
         const userMessage = document.createElement("div");
         userMessage.innerText = userInputValue;
         userMessage.classList.add("ui", "message", "judge0-message", "judge0-user-message");
         if (!theme.isLight()) {
             userMessage.classList.add("inverted");
         }
-
-        const messages = document.getElementById("judge0-chat-messages");
         messages.appendChild(userMessage);
 
         userInput.value = "";
@@ -67,16 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         THREAD.push({
             role: "user",
-            content: `
-User's code:
-${sourceEditor.getValue()}
-
-User's message:
-${userInputValue}
-`.trim()
+            content: `User's code:\n${sourceEditor.getValue()}\n\nUser's message:\n${userInputValue}`.trim()
         });
 
-
+        // Display AI loading message
         const aiMessage = document.createElement("div");
         aiMessage.classList.add("ui", "basic", "segment", "judge0-message", "loading");
         if (!theme.isLight()) {
@@ -85,28 +79,28 @@ ${userInputValue}
         messages.appendChild(aiMessage);
         messages.scrollTop = messages.scrollHeight;
 
-        const aiResponse = await puter.ai.chat(THREAD, {
-            model: document.getElementById("judge0-chat-model-select").value,
-        });
-        let aiResponseValue = aiResponse.toString();
-        if (typeof aiResponseValue !== "string") {
-            aiResponseValue = aiResponseValue.map(v => v.text).join("\n");
+        try {
+            const aiResponse = await puter.ai.chat(THREAD, {
+                model: document.getElementById("judge0-chat-model-select").value,
+            });
+            let aiResponseValue = typeof aiResponse === "string" ? aiResponse : aiResponse.map(v => v.text).join("\n");
+            
+            THREAD.push({
+                role: "assistant",
+                content: aiResponseValue
+            });
+            
+            aiMessage.innerHTML = DOMPurify.sanitize(marked.parse(aiResponseValue));
+            renderMathInElement(aiMessage, {
+                delimiters: [
+                    { left: "\\(", right: "\\)", display: false },
+                    { left: "\\[", right: "\\]", display: true }
+                ]
+            });
+        } catch (error) {
+            aiMessage.innerText = "Error: Unable to fetch response. Please try again.";
         }
-
-        THREAD.push({
-            role: "assistant",
-            content: aiResponseValue
-        });
-
-        aiMessage.innerHTML = DOMPurify.sanitize(aiResponseValue);
-        renderMathInElement(aiMessage, {
-            delimiters: [
-                { left: "\\(", right: "\\)", display: false },
-                { left: "\\[", right: "\\]", display: true }
-            ]
-        });
-        aiMessage.innerHTML = marked.parse(aiMessage.innerHTML);
-
+        
         aiMessage.classList.remove("loading");
         messages.scrollTop = messages.scrollHeight;
 
@@ -116,21 +110,16 @@ ${userInputValue}
     });
 
     document.getElementById("judge0-chat-model-select").addEventListener("change", function () {
-        const userInput = document.getElementById("judge0-chat-user-input");
-        userInput.placeholder = `Message ${this.value}`;
+        document.getElementById("judge0-chat-user-input").placeholder = `Message ${this.value}`;
     });
 });
 
+// Keyboard shortcut for quick AI input focus
 document.addEventListener("keydown", function (e) {
     if (e.metaKey || e.ctrlKey) {
-        switch (e.key) {
-            case "p":
-                if (!configuration.get("appOptions.showAIAssistant")) {
-                    break;
-                }
-                e.preventDefault();
-                document.getElementById("judge0-chat-user-input").focus();
-                break;
+        if (e.key === "p" && configuration.get("appOptions.showAIAssistant")) {
+            e.preventDefault();
+            document.getElementById("judge0-chat-user-input").focus();
         }
     }
 });
